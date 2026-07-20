@@ -29,7 +29,7 @@ pipeline{
                     -Dsonar.projectKey=Multitier -Dsonar.java.binaries=target"
                 }
             }
-        }
+         }
         
         stage('Publish To Nexus ') {
             steps {
@@ -61,7 +61,7 @@ pipeline{
                      sleep 30
             }
         }
-    }
+    
         stage('Verify Deployment'){
             steps{
                  withKubeConfig(caCertificate:'', clusterName:'devops-cluster', contextName:'',credentialsId:
@@ -71,32 +71,3 @@ pipeline{
         }
     }
 
-
-    post {
-    always {
-        script {
-            def buildStatus = currentBuild.currentResult
-            def buildUser = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')[0]?.userId ?: 'Github User'
-            
-            emailext (
-                subject: "Pipeline ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    <p>This is a Jenkins Bankapp CICD pipeline status.</p>
-                    <p>Project: ${env.JOB_NAME}</p>
-                    <p>Build Number: ${env.BUILD_NUMBER}</p>
-                    <p>Build Status: ${buildStatus}</p>
-                    <p>Started by: ${buildUser}</p>
-                    <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                """,
-                to: 'nishantbadhiye07@gmail.com',
-                from: 'nishantbadhiye07@gmail.com',
-                replyTo: 'nishantbadhiye07@gmail.com',
-                mimeType: 'text/html',
-                attachmentsPattern: 'trivyfs.html,trivyimage.html'
-            )
-           }
-       }
-
-    }
-
-}

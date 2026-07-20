@@ -17,19 +17,17 @@ pipeline{
                 sh "trivy fs --format table -o  trivyfs.html . "
             }
         }
-        
+        stage('Build') {
+            steps {
+                sh "mvn clean package"
+            }
+        }        
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('Sonar') {
                     sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Multitier \
                     -Dsonar.projectKey=Multitier -Dsonar.java.binaries=target"
                 }
-            }
-        }
-           
-        stage('Build') {
-            steps {
-                sh "mvn clean package"
             }
         }
         

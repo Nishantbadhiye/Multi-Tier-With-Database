@@ -33,7 +33,7 @@ pipeline{
         
         stage('Publish To Nexus ') {
             steps {
-                withMaven(globalMavenSettingsConfig:'settings-maven', jdk:'', maven:'maven3', mavenSettingsConfig:", traceability:true){ 
+                withMaven(globalMavenSettingsConfig:'settings-maven', jdk:'', maven:'maven3'){ 
                     sh "mvn deploy"
                 }
             }
@@ -57,7 +57,7 @@ pipeline{
         stage('Deploy to Kubernetes'){
             steps{
                  withKubeConfig(caCertificate:'',clusterName:'devops-cluster',
-                     sh 'kubectl apply -f ds.yml -n webapps'
+                     sh "kubectl apply -f ds.yml -n webapps"
                      sleep 30
             }
         }
@@ -92,7 +92,7 @@ pipeline{
                 from: 'nishantbadhiye07@gmail.com',
                 replyTo: 'nishantbadhiye07@gmail.com',
                 mimeType: 'text/html',
-                attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+                attachmentsPattern: 'trivyfs.html,trivyimage.html'
             )
            }
        }
